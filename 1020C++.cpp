@@ -1,22 +1,51 @@
 #include <iostream>
+#include <algorithm>
 using namespace std;
 /*
-1020 月饼
-本题核心：
-（1）N长度为1000，不能用int
-（2）如何统计0-9出现的个数 
+1020月饼 
+本题核心
+（1）贪心算法
+（2）int与double 
 */ 
+#define MAXN 1010
+struct mooncake{
+	double t;
+	double value;
+	double ans;
+};
+mooncake N_sort[MAXN];
+bool operator <(const mooncake &a,const mooncake &b){
+	return a.ans<b.ans;
+}
+
 int main(){
-	string N;
-	cin>>N;
-	int d[10]={0};
-	int len=N.length();
-	for(int i=0;i<len;i++)
-		d[N[i]-'0']++;
+	int N,D;
+	cin>>N>>D;
+	for(int i=0;i<N;i++)
+		cin>>N_sort[i].t;
+		
+	for(int i=0;i<N;i++)
+		cin>>N_sort[i].value;
+	for(int i=0;i<N;i++)
+		N_sort[i].ans=N_sort[i].value/N_sort[i].t;
+	sort(N_sort,N_sort+N);
+	double total_value=0;
 	
-	for(int i=0;i<10;i++){
-		if(d[i]!=0)
-			cout<<i<<":"<<d[i]<<endl;
+	while(D!=0){
+		N--;
+		if(D>=N_sort[N].t){
+			D=D-N_sort[N].t;
+			total_value+=N_sort[N].value;
+		}
+		else{
+			total_value+=D*N_sort[N].ans;
+			D=0;
+		}
+//		printf("%.2f",total_value);
+		if(N==0)
+			break;
 	}
+	printf("%.2f",total_value);
+	
 	return 0;
 }
